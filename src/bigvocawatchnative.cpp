@@ -77,7 +77,7 @@ app_create(int width, int height, void *data)
 		Initialize UI resources and application's data
 		If this function returns true, the main loop of application starts
 		If this function returns false, the application is terminated */
-	appdata_s *ad = data;
+	appdata_s* ad = static_cast<appdata_s*>(data);
 
 	create_base_gui(ad, width, height);
 
@@ -112,7 +112,7 @@ static void
 app_time_tick(watch_time_h watch_time, void *data)
 {
 	/* Called at each second while your app is visible. Update watch UI. */
-	appdata_s *ad = data;
+	appdata_s* ad = static_cast<appdata_s*>(data);
 	update_watch(ad, watch_time, 0);
 }
 
@@ -120,7 +120,7 @@ static void
 app_ambient_tick(watch_time_h watch_time, void *data)
 {
 	/* Called at each minute while the device is in ambient mode. Update watch UI. */
-	appdata_s *ad = data;
+	appdata_s* ad = static_cast<appdata_s*>(data);
 	update_watch(ad, watch_time, 1);
 }
 
