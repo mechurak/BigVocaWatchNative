@@ -1,3 +1,7 @@
 /.sign
+/.setting
 /Debug
 /SA_Report
+.edj
+.rds_delta
+.sdk_delta.info

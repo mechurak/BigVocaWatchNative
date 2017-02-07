@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns="http://tizen.org/ns/packages" package="com.sshimnssso.bigvocawatchnative" api-version="2.3.2" version="1.0.0">
-	<profile name="wearable" />
-	<watch-application appid="com.sshimnssso.bigvocawatchnative" exec="bigvocawatchnative" ambient-support="true">
-		<icon>bigvocawatchnative.png</icon>
-		<label>bigvocawatchnative</label>
-	</watch-application>
-	<privileges>
-		<privilege>http://tizen.org/privilege/alarm.set</privilege>
-	</privileges>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<manifest xmlns="http://tizen.org/ns/packages" api-version="2.3.2" package="com.sshimnssso.bigvocawatchnative" version="1.0.0">
+    <profile name="wearable"/>
+    <watch-application ambient-support="false" appid="com.sshimnssso.bigvocawatchnative" exec="bigvocawatchnative">
+        <label>bigvocawatchnative</label>
+        <icon>bigvocawatchnative.png</icon>
+    </watch-application>
+    <privileges>
+        <privilege>http://tizen.org/privilege/alarm.set</privilege>
+    </privileges>
 </manifest>

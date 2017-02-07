@@ -1,0 +1,49 @@
+collections {
+   group { name: "layout_group_main";
+      parts {
+         part {
+            name: "txt.clock";
+            type: TEXT;
+            description {
+               state: "default" 0.0;
+               color: 0 255 0 255;
+               rel1 { relative: 0.0 0.4;}
+               rel2 { relative: 1.0 0.6;}
+               text {
+                  font: "Tizen:style=Regular";                  
+                  size: 45;
+                  text: "11:11:11";
+                  align: 0.5 0.5;
+               }
+            }
+         }
+         part {
+            name: "rect.bottomline";
+            type: RECT;
+            description {
+               state: "default" 0.0;
+               color: 0 255 0 255;
+               rel1 { relative: 0.1 0.6;}
+               rel2 { relative: 0.9 0.61;}
+               align: 0.5 0.5;
+            }            
+         }
+         part {
+            name: "txt.word";
+            type: TEXT;
+            description {
+               state: "default" 0.0;
+               color: 0 255 0 255;
+               rel1.relative: 0.0 0.65;
+               rel2.relative: 1.0 0.8;
+               text {
+                  font: "Tizne:style=Regular";
+                  size: 20;
+                  text: "good";
+                  align: 0.5 0.5;
+               }
+            }
+         }         
+      } //parts end
+   } //group end
+} //collections end
