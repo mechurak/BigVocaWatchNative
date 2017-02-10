@@ -1,7 +1,7 @@
 /.sign
-/.setting
+/.settings
 /Debug
 /SA_Report
-.edj
+*.edj
 .rds_delta
 .sdk_delta.info

@@ -135,7 +135,7 @@ void view_set_clock(int hour, int minute, int second)
 {
 	Eina_Stringshare *str = eina_stringshare_printf("%.2d:%.2d:%.2d", hour, minute, second);
 	Eina_Bool ret = elm_layout_text_set(s_info.layout, (const char*)PART_CLOCK_TEXT, (const char*)str);
-	dlog_print(DLOG_INFO, LOG_TAG, "ret: %d. %s", ret, str);
+	//dlog_print(DLOG_DEBUG, LOG_TAG, "ret: %d. %s", ret, str);
 	eina_stringshare_del(str);
 }
 

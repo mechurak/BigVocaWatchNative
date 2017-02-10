@@ -3,6 +3,7 @@
 #include "bigvocawatchnative.h"
 #include "view.h"
 #include "view_defines.h"
+#include "DbHelper.h"
 
 struct main_info {
 	int hour;
@@ -120,6 +121,9 @@ static bool app_create(int width, int height, void* user_data)
 	if (watch_app_add_event_handler(&handlers[APP_EVENT_DEVICE_ORIENTATION_CHANGED], APP_EVENT_DEVICE_ORIENTATION_CHANGED, device_orientation, NULL) != APP_ERROR_NONE)
 		dlog_print(DLOG_ERROR, LOG_TAG, "watch_app_add_event_handler () is failed");
 
+	DbHelper* dbHelper = new DbHelper();
+	//dbHelper->showRecord();
+
 	view_create_with_size(width, height);
 
 	_curent_time_get();
@@ -180,7 +184,7 @@ static void app_terminate(void *user_data)
 static void app_time_tick(watch_time_h watch_time, void* user_data)
 {
 	_time_get(watch_time);
-	dlog_print(DLOG_INFO, LOG_TAG, "app_time_tick %d:%d:%d", s_time_info.hour, s_time_info.minute, s_time_info.second);
+	//dlog_print(DLOG_DEBUG, LOG_TAG, "app_time_tick %d:%d:%d", s_time_info.hour, s_time_info.minute, s_time_info.second);
 	/*
 	if (s_info.second == 0 && s_info.minute != 0) {
 		view_set_minute(s_info.minute);
