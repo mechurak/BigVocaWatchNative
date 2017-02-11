@@ -122,7 +122,8 @@ static bool app_create(int width, int height, void* user_data)
 		dlog_print(DLOG_ERROR, LOG_TAG, "watch_app_add_event_handler () is failed");
 
 	DbHelper* dbHelper = new DbHelper();
-	//dbHelper->showRecord();
+	//dbHelper->getWordListByLesson(1,2);
+	dbHelper->getWordListByLevel(26);
 
 	view_create_with_size(width, height);
 

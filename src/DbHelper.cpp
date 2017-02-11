@@ -3,6 +3,11 @@
 
 using namespace std;
 
+int DbHelper::mSelectRowCount = 0;
+Word DbHelper::wordList[100];
+int DbHelper::wordCount = 0;
+
+
 DbHelper::DbHelper() {
 	dlog_print(DLOG_INFO, LOG_TAG, "DbHelper ctor");
 	char* sharedPath = app_get_shared_resource_path();
@@ -21,31 +26,50 @@ DbHelper::~DbHelper() {
 	}
 }
 
-/*
-std::vector<word> DbHelper::getWordList() {
-	if (!mDbHandle) {
-		dlog_print(DLOG_WARN, LOG_TAG, "[%s,%d] db error", __FILE__, __LINE__);
-		return NULL;
-	}
-}
-*/
+int DbHelper::callback(void *NotUsed, int argc, char **argv, char **azColName) {
+	dlog_print(DLOG_INFO, LOG_TAG, "callback. mSelectRowCount: %d", mSelectRowCount);
 
-void DbHelper::showRecord() {
-    char *sql = "select * from word";
+	wordList[mSelectRowCount].id = atoi(argv[0]);
+	wordList[mSelectRowCount].day = atoi(argv[1]);
+	wordList[mSelectRowCount].spelling = string(argv[2]);
+	wordList[mSelectRowCount].meaning = string(argv[3]);
+
+	dlog_print(DLOG_INFO, LOG_TAG, "  %d, %d, %s, %s", wordList[mSelectRowCount].id, wordList[mSelectRowCount].day, wordList[mSelectRowCount].spelling.c_str(), wordList[mSelectRowCount].meaning.c_str());
+
+	mSelectRowCount++;
+	return SQLITE_OK;
+}
+
+void DbHelper::getWordListByLevel(int level) {
+	int fromId = (level - 1) * 100 + 1;
+	int toId = level * 100;
+	dlog_print(DLOG_ERROR, LOG_TAG, "getWordListByLevel. from: %d, to: %d", fromId, toId);
+
+	char sql[200];
+	snprintf(sql, 200, "SELECT * FROM word WHERE id >= %d AND id <= %d ORDER BY id;", fromId, toId);
     int counter = 0;
-    int ret = 0;
     char *ErrMsg;
 
+    mSelectRowCount = 0;
 
     sqlite3_exec(mDbHandle, sql, callback, &counter, &ErrMsg);
+    dlog_print(DLOG_ERROR, LOG_TAG, "after sqlite3_exec. %d. %s", counter, ErrMsg);
+    wordCount = mSelectRowCount;
 
     return;
 }
 
-int DbHelper::callback(void *NotUsed, int argc, char **argv, char **azColName) {
-	int i;
-	for(i=0; i<argc; i++){
-		dlog_print(DLOG_INFO, LOG_TAG, "%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-	}
-	return 0;
+void DbHelper::getWordListByLesson(int fromLesson, int toLesson) {
+	char sql[200];
+	snprintf(sql, 200, "SELECT * FROM word WHERE day >= %d AND day <= %d ORDER BY day ASC, id ASC;", fromLesson, toLesson);
+    int counter = 0;
+    char *ErrMsg;
+
+    mSelectRowCount = 0;
+
+    sqlite3_exec(mDbHandle, sql, callback, &counter, &ErrMsg);
+    dlog_print(DLOG_ERROR, LOG_TAG, "after sqlite3_exec. %d. %s", counter, ErrMsg);
+    wordCount = mSelectRowCount;
+
+    return;
 }
