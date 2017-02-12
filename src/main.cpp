@@ -260,7 +260,7 @@ static void _time_get(watch_time_h watch_time)
 {
 	watch_time_get_second(watch_time, &s_time_info.second);
 	watch_time_get_minute(watch_time, &s_time_info. minute);
-	watch_time_get_hour(watch_time, &s_time_info.hour);
+	watch_time_get_hour24(watch_time, &s_time_info.hour);
 }
 
 /*
