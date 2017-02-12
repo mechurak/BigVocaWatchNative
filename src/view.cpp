@@ -140,7 +140,11 @@ void view_set_clock(int hour, int minute, int second)
 }
 
 void view_set_word(int index, const char* text) {
-	Eina_Bool ret = elm_layout_text_set(s_info.layout, (const char*)PART_WORD_TEXT, text);
+	Eina_Stringshare* indexStr = eina_stringshare_printf("%d", index);
+	Eina_Bool ret1 = elm_layout_text_set(s_info.layout, (const char*)PART_WORD_INDEX_TEXT, (const char*)indexStr);
+	eina_stringshare_del(indexStr);
+
+	Eina_Bool ret2 = elm_layout_text_set(s_info.layout, (const char*)PART_WORD_TEXT, text);
 }
 
 /*
