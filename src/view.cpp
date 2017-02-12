@@ -139,6 +139,10 @@ void view_set_clock(int hour, int minute, int second)
 	eina_stringshare_del(str);
 }
 
+void view_set_word(int index, const char* text) {
+	Eina_Bool ret = elm_layout_text_set(s_info.layout, (const char*)PART_WORD_TEXT, text);
+}
+
 /*
  * @brief Sets the hour value displayed by the edje layout
  * @param hour - Hour value

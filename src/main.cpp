@@ -177,6 +177,17 @@ static void app_terminate(void *user_data)
 	view_destroy();
 }
 
+
+
+
+// 0, 1: spelling
+// 2, 3: meaning
+// 4, 5: spelling
+// 6, 7: meaning
+
+int g_wordStatus = 0;
+int g_wordIndex = 0;
+
 /*
  * @brief Called at each second. This callback is not called while the app is paused or the device is in ambient mode.
  * @param[in] watch_time The watch time handle. watch_time will not be available after returning this callback. It will be freed by the framework.
@@ -195,6 +206,25 @@ static void app_time_tick(watch_time_h watch_time, void* user_data)
 	*/
 
 	view_set_clock(s_time_info.hour, s_time_info.minute, s_time_info.second);
+
+	if (g_wordStatus % 2 == 0) {
+		int index = DbHelper::wordList[g_wordIndex].id;
+		const char* content;
+		if (g_wordStatus % 4 == 0 || g_wordStatus % 4 == 1) {
+			content = DbHelper::wordList[g_wordIndex].spelling.c_str();
+		} else {
+			content = DbHelper::wordList[g_wordIndex].meaning.c_str();
+		}
+		view_set_word(index, content);
+	}
+	g_wordStatus++;
+	if (g_wordStatus > 7) {
+		g_wordStatus = 0;
+		g_wordIndex++;
+		if (g_wordIndex > DbHelper::wordCount - 1) {
+			g_wordIndex = 0;
+		}
+	}
 }
 
 /*
