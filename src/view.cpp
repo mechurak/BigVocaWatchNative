@@ -8,32 +8,92 @@
 struct view_info {
 	Evas_Object *win;
 	Evas_Object *layout;
-	Evas_Object *image;
+	Evas_Object* settingLayout;
 	int w;
 	int h;
+	int settingLayoutEnabled;
+	int mode;
+	int level;
+	int lesson;
+	int randomEnabled;
+	void(*settingCb)(int,int,int,int,int);
 };
 
 static view_info s_info = {
 	NULL,
 	NULL,
 	NULL,
-	0,
-	0,
+	0, 0, 0, 0,
+	0, 0, 0,
+	NULL,
 };
 
 static void _message_outside_object_cb(void *data, Evas_Object *obj, Edje_Message_Type type, int id, void *msg);
 static char *_create_resource_path(const char *file_name);
 static Evas_Object *_create_layout(void);
 
+
+/**
+ * @brief This function is called when battery module is clicked.
+ * @param[in] data A pointer to the data to pass to the callback function
+ * @param[in] obj The Edje object where the signal comes from
+ * @param[in] emission The signal name
+ * @param[in] source The signal source
+ */
+static void _temp_cb(void *data, Evas_Object *obj, const char *emission, const char *source)
+{
+	dlog_print(DLOG_DEBUG, LOG_TAG, "temp_cb: %s. %s", emission, source);
+	if (s_info.settingLayoutEnabled) {
+		elm_object_signal_emit(s_info.layout, "hide", "txt.wordIndex");
+		s_info.settingLayoutEnabled = 0;
+	} else {
+		elm_object_signal_emit(s_info.layout, "show", "txt.wordIndex");
+		s_info.settingLayoutEnabled = 1;
+	}
+}
+
+static void _level_cb(void *data, Evas_Object *obj, const char *emission, const char* source)
+{
+	dlog_print(DLOG_DEBUG, LOG_TAG, "_level_cb: %s. %s", emission, source);
+	if (strcmp(source, (char*)"level,down") == 0) {
+		s_info.level--;
+	}
+	else if (strcmp(source, (char*)"level,up") == 0) {
+		s_info.level++;
+	}
+	else if (strcmp(source, (char*)"lesson,down") == 0) {
+		s_info.lesson--;
+	}
+	else if (strcmp(source, (char*)"lesson,up") == 0) {
+		s_info.lesson++;
+	}
+	Eina_Stringshare* levelStr = eina_stringshare_printf("%d", s_info.level);
+	Eina_Bool ret1 = elm_layout_text_set(s_info.settingLayout, (const char*)"txt.levelValue", (const char*)levelStr);
+
+	Eina_Stringshare* lessonStr = eina_stringshare_printf("%d", s_info.lesson);
+	Eina_Bool ret2 = elm_layout_text_set(s_info.settingLayout, (const char*)"txt.lessonValue", (const char*)lessonStr);
+}
+
+static void _submit_cb(void *data, Evas_Object *obj, const char *emission, const char* source)
+{
+	dlog_print(DLOG_DEBUG, LOG_TAG, "_submit_cb: %s. %s", emission, source);
+	s_info.settingCb(s_info.mode, s_info.randomEnabled, s_info.level, s_info.lesson, s_info.lesson);
+
+	elm_object_signal_emit(s_info.layout, "hide", "txt.wordIndex");
+	s_info.settingLayoutEnabled = 0;
+}
+
+
 /*
  * @brief Creates the application view with received size
  * @param width - Application width
  * @param height - Application height
  */
-void view_create_with_size(int width, int height)
+void view_create_with_size(int width, int height, void(*cb)(int, int, int, int, int))
 {
 	s_info.w = width;
 	s_info.h = height;
+	s_info.settingCb = cb;
 	view_create();
 }
 
@@ -46,6 +106,7 @@ void view_create(void)
 	s_info.win = view_create_win(PACKAGE);
 	if (s_info.win == NULL) {
 		dlog_print(DLOG_ERROR, LOG_TAG, "failed to create a window.");
+
 		return;
 	}
 
@@ -55,6 +116,13 @@ void view_create(void)
 		dlog_print(DLOG_ERROR, LOG_TAG, "failed to create main layout.");
 		return;
 	}
+
+	view_set_customized_event_callback(s_info.layout, (char*)"mouse,clicked", (char*)"txt.wordIndex", _temp_cb, NULL);
+	view_set_customized_event_callback(s_info.settingLayout, (char*)"mouse,clicked", (char*)"level,down", _level_cb, NULL);
+	view_set_customized_event_callback(s_info.settingLayout, (char*)"mouse,clicked", (char*)"level,up", _level_cb, NULL);
+	view_set_customized_event_callback(s_info.settingLayout, (char*)"mouse,clicked", (char*)"lesson,down", _level_cb, NULL);
+	view_set_customized_event_callback(s_info.settingLayout, (char*)"mouse,clicked", (char*)"lesson,up", _level_cb, NULL);
+	view_set_customized_event_callback(s_info.settingLayout, (char*)"mouse,clicked", (char*)"submit", _submit_cb, NULL);
 
 	/* Show window after main view is set up */
 	evas_object_show(s_info.win);
@@ -220,5 +288,34 @@ static Evas_Object *_create_layout(void)
 
 	dlog_print(DLOG_INFO, LOG_TAG, "_create_layout. %d, %d", s_info.w, s_info.h);
 
+
+	s_info.settingLayout = elm_layout_add(layout);
+	elm_layout_file_set(s_info.settingLayout, edj_path, (char*)"layout_group_wordPopup");
+	elm_object_part_content_set(layout, "swallow.wordPopup", s_info.settingLayout);
+
 	return layout;
+}
+
+/**
+ * @brief Sends signal with source to the EDJE object.
+ * @param[in] layout The layout object will receive the signal
+ * @param[in] signal The appointed signal to trigger the function
+ * @param[in] source The appointed source that normally indicate the object triggered the event
+ */
+void view_send_signal_to_edje(Evas_Object *layout, const char *signal, const char *source)
+{
+	elm_object_signal_emit(layout, signal, source);
+}
+
+/**
+ * @brief Sets the function will be called when the appointed signal is occurred.
+ * @param[in] item The object triggered the signal
+ * @param[in] signal The appointed signal to trigger the function
+ * @param[in] source The appointed source that normally indicate the object triggered the event
+ * @param[in] signal_cb The function will be called when the signal is detected
+ * @param[in] user_data The data passed to the 'signal_cb' function
+ */
+void view_set_customized_event_callback(Evas_Object *item, char *signal, char *source, Edje_Signal_Cb signal_cb, void *user_data)
+{
+	elm_object_signal_callback_add(item, signal, source, signal_cb, user_data);
 }

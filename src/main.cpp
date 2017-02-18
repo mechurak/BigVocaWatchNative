@@ -15,6 +15,9 @@ static main_info s_time_info = {0, 0, 0};
 
 static void _time_get(watch_time_h watch_time);
 static void _curent_time_get(void);
+static void settingChangedCb(int mode, int randomEnabled, int level, int lessonFrom, int lessonTo) {
+	dlog_print(DLOG_INFO, LOG_TAG, "setting changed. mode: %d, random: %d, level: %d, lesson: %d ~ %d", mode, randomEnabled, level, lessonFrom, lessonTo);
+}
 
 /*
  * @brief The system language changed event callback function
@@ -125,7 +128,7 @@ static bool app_create(int width, int height, void* user_data)
 	//dbHelper->getWordListByLesson(1,2);
 	dbHelper->getWordListByLevel(26);
 
-	view_create_with_size(width, height);
+	view_create_with_size(width, height, settingChangedCb);
 
 	_curent_time_get();
 
