@@ -5,6 +5,13 @@
 #include "view_defines.h"
 #include "DbHelper.h"
 
+int g_wordStatus = 0;
+int g_wordIndex = 0;
+int g_mode = 0;
+int g_level = 25;
+int g_lessonFrom = 1;
+int g_lessonTo = 3;
+
 struct main_info {
 	int hour;
 	int minute;
@@ -17,6 +24,16 @@ static void _time_get(watch_time_h watch_time);
 static void _curent_time_get(void);
 static void settingChangedCb(int mode, int randomEnabled, int level, int lessonFrom, int lessonTo) {
 	dlog_print(DLOG_INFO, LOG_TAG, "setting changed. mode: %d, random: %d, level: %d, lesson: %d ~ %d", mode, randomEnabled, level, lessonFrom, lessonTo);
+	g_mode = mode;
+	DbHelper* dbHelper = new DbHelper();
+	if (g_mode == 0) {
+		dbHelper->getWordListByLevel(level);
+	}
+	else {
+		dbHelper->getWordListByLesson(lessonFrom, lessonTo);
+	}
+	g_wordStatus = 0;
+	g_wordIndex = 0;
 }
 
 /*
@@ -179,10 +196,6 @@ static void app_terminate(void *user_data)
 {
 	view_destroy();
 }
-
-
-int g_wordStatus = 0;
-int g_wordIndex = 0;
 
 /*
  * @brief Called at each second. This callback is not called while the app is paused or the device is in ambient mode.

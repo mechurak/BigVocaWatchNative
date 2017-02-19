@@ -186,8 +186,7 @@ collections {
             type: TEXT;
             mouse_events: 1;            
             description { state: "default" 0.0;
-               align: 0.5 0.5;
-               color: 100 255 255 255;
+               align: 0.5 0.5;               
                rel1.relative: 0.55 0.3;
                rel2.relative: 0.75 0.4;
                text {
@@ -199,33 +198,23 @@ collections {
             }
          }
          part { name: "txt.levelDown";
-            type: TEXT;
+            type: RECT;
             mouse_events: 1;
             description { state: "default" 0.0;
                align: 0.5 0.5;
-               rel1.relative: 0.35 0.3;
-               rel2.relative: 0.5 0.4;
-               text {
-                  font: "Tizen:style=Regular";
-                  size: 15;
-                  text: "<";
-                  align: 0.5 0.5;
-               }
+               color: 0 100 0 255;
+               rel1.relative: 0.32 0.25;
+               rel2.relative: 0.53 0.45;
             }
          }
          part { name: "txt.levelUp";
-            type: TEXT;
+            type: RECT;
             mouse_events: 1;
             description { state: "default" 0.0;
                align: 0.5 0.5;
-               rel1.relative: 0.8 0.3;
-               rel2.relative: 0.95 0.4;
-               text {
-                  font: "Tizen:style=Regular";
-                  size: 15;
-                  text: ">";
-                  align: 0.5 0.5;
-               }
+               color: 0 100 0 255;
+               rel1.relative: 0.77 0.24;
+               rel2.relative: 0.98 0.45;
             }
          }
          part { name: "txt.lesson";
@@ -259,33 +248,23 @@ collections {
             }
          }
          part { name: "txt.lessonDown";
-            type: TEXT;
+            type: RECT;
             mouse_events: 1;
             description { state: "default" 0.0;
                align: 0.5 0.5;
-               rel1.relative: 0.35 0.6;
-               rel2.relative: 0.5 0.7;
-               text {
-                  font: "Tizen:style=Regular";
-                  size: 15;
-                  text: "<";
-                  align: 0.5 0.5;
-               }
+               color: 0 100 0 255;
+               rel1.relative: 0.32 0.55;
+               rel2.relative: 0.53 0.75;
             }
          }
          part { name: "txt.lessonUp";
-            type: TEXT;
+            type: RECT;
             mouse_events: 1;
             description { state: "default" 0.0;
                align: 0.5 0.5;
-               rel1.relative: 0.8 0.6;
-               rel2.relative: 0.95 0.7;
-               text {
-                  font: "Tizen:style=Regular";
-                  size: 15;
-                  text: ">";
-                  align: 0.5 0.5;
-               }
+               color: 0 100 0 255;
+               rel1.relative: 0.77 0.55;
+               rel2.relative: 0.98 0.75;
             }
          }
          part { name: "txt.submit";
@@ -293,8 +272,8 @@ collections {
             mouse_events: 1;
             description { state: "default" 0.0;
                align: 0.5 0.5;
-               rel1.relative: 0.3 0.85;
-               rel2.relative: 0.7 0.95;
+               rel1.relative: 0.3 0.82;
+               rel2.relative: 0.7 0.98;
                text {
                   font: "Tizen:style=Regular";
                   size: 15;

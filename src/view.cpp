@@ -57,15 +57,19 @@ static void _level_cb(void *data, Evas_Object *obj, const char *emission, const 
 	dlog_print(DLOG_DEBUG, LOG_TAG, "_level_cb: %s. %s", emission, source);
 	if (strcmp(source, (char*)"level,down") == 0) {
 		s_info.level--;
+		s_info.mode = 0;
 	}
 	else if (strcmp(source, (char*)"level,up") == 0) {
 		s_info.level++;
+		s_info.mode = 0;
 	}
 	else if (strcmp(source, (char*)"lesson,down") == 0) {
 		s_info.lesson--;
+		s_info.mode = 1;
 	}
 	else if (strcmp(source, (char*)"lesson,up") == 0) {
 		s_info.lesson++;
+		s_info.mode = 1;
 	}
 	Eina_Stringshare* levelStr = eina_stringshare_printf("%d", s_info.level);
 	Eina_Bool ret1 = elm_layout_text_set(s_info.settingLayout, (const char*)"txt.levelValue", (const char*)levelStr);
