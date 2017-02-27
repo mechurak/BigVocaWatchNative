@@ -4,3 +4,6 @@ project_def.prop
 *.edj
 .*
 !.gitignore
+!.project
+!.tproject
+!.cproject
