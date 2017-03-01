@@ -27,10 +27,10 @@ static void settingChangedCb(int mode, int randomEnabled, int level, int lessonF
 	g_mode = mode;
 	DbHelper* dbHelper = new DbHelper();
 	if (g_mode == 0) {
-		dbHelper->getWordListByLevel(level);
+		dbHelper->getWordListByLevel(level, randomEnabled);
 	}
 	else {
-		dbHelper->getWordListByLesson(lessonFrom, lessonTo);
+		dbHelper->getWordListByLesson(lessonFrom, lessonTo, randomEnabled);
 	}
 	g_wordStatus = 0;
 	g_wordIndex = 0;
@@ -143,7 +143,7 @@ static bool app_create(int width, int height, void* user_data)
 
 	DbHelper* dbHelper = new DbHelper();
 	//dbHelper->getWordListByLesson(1,2);
-	dbHelper->getWordListByLevel(26);
+	dbHelper->getWordListByLevel(26, TRUE);
 
 	view_create_with_size(width, height, settingChangedCb);
 

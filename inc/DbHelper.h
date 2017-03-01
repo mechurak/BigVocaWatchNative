@@ -19,8 +19,8 @@ public:
 	DbHelper();
 	~DbHelper();
 	static int callback(void *NotUsed, int argc, char **argv, char **azColName);
-	void getWordListByLevel(int level);
-	void getWordListByLesson(int fromLesson, int toLesson);
+	void getWordListByLevel(int level, int randomEnabled);
+	void getWordListByLesson(int fromLesson, int toLesson, int randomEnabled);
 };
 
 #endif

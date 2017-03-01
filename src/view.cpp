@@ -24,7 +24,7 @@ static view_info s_info = {
 	NULL,
 	NULL,
 	0, 0, 0, 0,
-	0, 0, 0,
+	0, 0, 1,
 	NULL,
 };
 
@@ -81,7 +81,7 @@ static void _level_cb(void *data, Evas_Object *obj, const char *emission, const 
 static void _submit_cb(void *data, Evas_Object *obj, const char *emission, const char* source)
 {
 	dlog_print(DLOG_DEBUG, LOG_TAG, "_submit_cb: %s. %s", emission, source);
-	s_info.settingCb(s_info.mode, s_info.randomEnabled, s_info.level, s_info.lesson, s_info.lesson);
+	s_info.settingCb(s_info.mode, s_info.randomEnabled, s_info.level, s_info.lesson, s_info.lesson + 2);
 
 	elm_object_signal_emit(s_info.layout, "hide", "txt.wordIndex");
 	s_info.settingLayoutEnabled = 0;

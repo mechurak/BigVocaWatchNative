@@ -40,13 +40,14 @@ int DbHelper::callback(void *NotUsed, int argc, char **argv, char **azColName) {
 	return SQLITE_OK;
 }
 
-void DbHelper::getWordListByLevel(int level) {
+void DbHelper::getWordListByLevel(int level, int randomEnabled) {
 	int fromId = (level - 1) * 100 + 1;
 	int toId = level * 100;
 	dlog_print(DLOG_ERROR, LOG_TAG, "getWordListByLevel. from: %d, to: %d", fromId, toId);
 
 	char sql[200];
-	snprintf(sql, 200, "SELECT * FROM word WHERE id >= %d AND id <= %d ORDER BY id;", fromId, toId);
+	const char* orderByValue = randomEnabled ? "random()" : "id";
+	snprintf(sql, 200, "SELECT * FROM word WHERE id >= %d AND id <= %d ORDER BY %s;", fromId, toId, orderByValue);
     int counter = 0;
     char *ErrMsg;
 
@@ -59,9 +60,10 @@ void DbHelper::getWordListByLevel(int level) {
     return;
 }
 
-void DbHelper::getWordListByLesson(int fromLesson, int toLesson) {
+void DbHelper::getWordListByLesson(int fromLesson, int toLesson, int randomEnabled) {
 	char sql[200];
-	snprintf(sql, 200, "SELECT * FROM word WHERE day >= %d AND day <= %d ORDER BY day ASC, id ASC;", fromLesson, toLesson);
+	const char* orderByValue = randomEnabled ? "random()" : "id";
+	snprintf(sql, 200, "SELECT * FROM word WHERE day >= %d AND day <= %d ORDER BY day, %s;", fromLesson, toLesson, orderByValue);
     int counter = 0;
     char *ErrMsg;
 
