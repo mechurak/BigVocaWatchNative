@@ -16,12 +16,15 @@ struct main_info {
 	int hour;
 	int minute;
 	int second;
+	int cur_day;
+	int cur_date;
 };
 
 static main_info s_time_info = {0, 0, 0};
 
 static void _time_get(watch_time_h watch_time);
 static void _curent_time_get(void);
+static void _set_calendar(int day, int date);
 static void settingChangedCb(int mode, int randomEnabled, int level, int lessonFrom, int lessonTo) {
 	dlog_print(DLOG_INFO, LOG_TAG, "setting changed. mode: %d, random: %d, level: %d, lesson: %d ~ %d", mode, randomEnabled, level, lessonFrom, lessonTo);
 	g_mode = mode;
@@ -204,6 +207,12 @@ static void app_terminate(void *user_data)
  */
 static void app_time_tick(watch_time_h watch_time, void* user_data)
 {
+	int day = 0;
+	int date = 0;
+	watch_time_get_day_of_week(watch_time, &day);
+	watch_time_get_day(watch_time, &date);
+	_set_calendar(day, date);
+
 	_time_get(watch_time);
 	view_set_clock(s_time_info.hour, s_time_info.minute, s_time_info.second);
 
@@ -273,4 +282,13 @@ static void _curent_time_get(void)
 	_time_get(watch_time);
 	view_set_clock(s_time_info.hour, s_time_info.minute, s_time_info.second);
 	watch_time_delete(watch_time);
+}
+
+static void _set_calendar(int day, int date)
+{
+	if (s_time_info.cur_day != day || s_time_info.cur_date != date) {
+		view_set_date(day, date);
+		s_time_info.cur_day = day;
+		s_time_info.cur_date = date;
+	}
 }

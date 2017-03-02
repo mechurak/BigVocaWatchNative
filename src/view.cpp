@@ -219,6 +219,20 @@ void view_set_word(int index, const char* text) {
 	Eina_Bool ret2 = elm_layout_text_set(s_info.layout, (const char*)PART_WORD_TEXT, text);
 }
 
+char* get_day_name(int day)
+{
+	char* day_name[7] = { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
+	return strdup(day_name[day]);
+}
+
+void view_set_date(int day, int date) {
+	char* day_name = NULL;
+	day_name = get_day_name(day - 1);
+	Eina_Stringshare* dateStr = eina_stringshare_printf("%s %d", day_name, day);
+	elm_layout_text_set(s_info.layout, (const char*)"txt.date", (const char*)dateStr);
+	eina_stringshare_del(dateStr);
+}
+
 /*
  * @brief Sets the hour value displayed by the edje layout
  * @param hour - Hour value

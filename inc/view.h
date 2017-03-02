@@ -11,6 +11,8 @@ Evas_Object *view_create_layout_for_part(Evas_Object *parent, char *file_path, c
 void view_destroy(void);
 void view_set_clock(int hour, int minute, int second);
 void view_set_word(int index, const char* text);
+char* get_day_name(int day);
+void view_set_date(int day, int date);
 void view_reset_display_state(void);
 
 void view_send_signal_to_edje(Evas_Object *layout, const char *signal, const char *source);
