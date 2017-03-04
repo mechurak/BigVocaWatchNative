@@ -7,6 +7,7 @@ struct Word {
 	int id;
 	int day;
 	std::string spelling;
+	std::string phonetic;
 	std::string meaning;
 };
 

@@ -4,7 +4,7 @@
 #include <sqlite3.h>
 #include "Word.h"
 
-const std::string dbFileName("wordlist_170120.db");
+const std::string dbFileName("wordlist_170304.db");
 
 class DbHelper {
 private:

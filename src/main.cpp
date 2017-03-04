@@ -217,13 +217,13 @@ static void app_time_tick(watch_time_h watch_time, void* user_data)
 	view_set_clock(s_time_info.hour, s_time_info.minute, s_time_info.second);
 
 	int index = DbHelper::wordList[g_wordIndex].id;
-	const char* content;
+	int mode;
 	if (g_wordStatus % 2 == 0) {
-		content = DbHelper::wordList[g_wordIndex].spelling.c_str();
+		mode = 0;
 	} else {
-		content = DbHelper::wordList[g_wordIndex].meaning.c_str();
+		mode = 1;
 	}
-	view_set_word(index, content);
+	view_set_word(index, mode, DbHelper::wordList[g_wordIndex].spelling.c_str(), DbHelper::wordList[g_wordIndex].phonetic.c_str(), DbHelper::wordList[g_wordIndex].meaning.c_str());
 
 	g_wordStatus++;
 	if (g_wordStatus > 3) {

@@ -32,9 +32,10 @@ int DbHelper::callback(void *NotUsed, int argc, char **argv, char **azColName) {
 	wordList[mSelectRowCount].id = atoi(argv[0]);
 	wordList[mSelectRowCount].day = atoi(argv[1]);
 	wordList[mSelectRowCount].spelling = string(argv[2]);
-	wordList[mSelectRowCount].meaning = string(argv[3]);
+	wordList[mSelectRowCount].phonetic = "[" + string(argv[3]) + "]";
+	wordList[mSelectRowCount].meaning = string(argv[4]);
 
-	dlog_print(DLOG_INFO, LOG_TAG, "  %d, %d, %s, %s", wordList[mSelectRowCount].id, wordList[mSelectRowCount].day, wordList[mSelectRowCount].spelling.c_str(), wordList[mSelectRowCount].meaning.c_str());
+	dlog_print(DLOG_INFO, LOG_TAG, "  %d, %d, %s, %s, %s", wordList[mSelectRowCount].id, wordList[mSelectRowCount].day, wordList[mSelectRowCount].spelling.c_str(), wordList[mSelectRowCount].phonetic.c_str(), wordList[mSelectRowCount].meaning.c_str());
 
 	mSelectRowCount++;
 	return SQLITE_OK;

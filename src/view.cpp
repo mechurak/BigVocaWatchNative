@@ -211,12 +211,20 @@ void view_set_clock(int hour, int minute, int second)
 	eina_stringshare_del(str);
 }
 
-void view_set_word(int index, const char* text) {
+void view_set_word(int index, int mode, const char* spelling, const char* phonetic, const char* meaning) {
 	Eina_Stringshare* indexStr = eina_stringshare_printf("%d", index);
 	Eina_Bool ret1 = elm_layout_text_set(s_info.layout, (const char*)PART_WORD_INDEX_TEXT, (const char*)indexStr);
 	eina_stringshare_del(indexStr);
 
-	Eina_Bool ret2 = elm_layout_text_set(s_info.layout, (const char*)PART_WORD_TEXT, text);
+	if (!mode) {
+		elm_layout_text_set(s_info.layout, (const char*)"txt.spelling", spelling);
+		elm_layout_text_set(s_info.layout, (const char*)"txt.phonetic", phonetic);
+		elm_layout_text_set(s_info.layout, (const char*)PART_WORD_TEXT, (const char*)"");
+	} else {
+		elm_layout_text_set(s_info.layout, (const char*)"txt.spelling", (const char*)"");
+		elm_layout_text_set(s_info.layout, (const char*)"txt.phonetic", (const char*)"");
+		elm_layout_text_set(s_info.layout, (const char*)PART_WORD_TEXT, meaning);
+	}
 }
 
 char* get_day_name(int day)
