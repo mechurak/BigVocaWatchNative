@@ -228,7 +228,7 @@ char* get_day_name(int day)
 void view_set_date(int day, int date) {
 	char* day_name = NULL;
 	day_name = get_day_name(day - 1);
-	Eina_Stringshare* dateStr = eina_stringshare_printf("%s %d", day_name, day);
+	Eina_Stringshare* dateStr = eina_stringshare_printf("%s %d", day_name, date);
 	elm_layout_text_set(s_info.layout, (const char*)"txt.date", (const char*)dateStr);
 	eina_stringshare_del(dateStr);
 }
