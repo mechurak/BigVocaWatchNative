@@ -61,11 +61,11 @@ static void _temp_cb(void *data, Evas_Object *obj, const char *emission, const c
 		s_info.randomEnabled = g_random;
 
 		Eina_Stringshare* levelStr = eina_stringshare_printf("%d", s_info.level);
-		Eina_Bool ret1 = elm_layout_text_set(s_info.settingLayout, (const char*)"txt.levelValue", (const char*)levelStr);
+		elm_layout_text_set(s_info.settingLayout, (const char*)"txt.levelValue", (const char*)levelStr);
 		eina_stringshare_del(levelStr);
 
 		Eina_Stringshare* lessonStr = eina_stringshare_printf("%d", s_info.lesson);
-		Eina_Bool ret2 = elm_layout_text_set(s_info.settingLayout, (const char*)"txt.lessonValue", (const char*)lessonStr);
+		elm_layout_text_set(s_info.settingLayout, (const char*)"txt.lessonValue", (const char*)lessonStr);
 		eina_stringshare_del(lessonStr);
 	}
 }
@@ -90,11 +90,11 @@ static void _level_cb(void *data, Evas_Object *obj, const char *emission, const 
 		s_info.mode = 1;
 	}
 	Eina_Stringshare* levelStr = eina_stringshare_printf("%d", s_info.level);
-	Eina_Bool ret1 = elm_layout_text_set(s_info.settingLayout, (const char*)"txt.levelValue", (const char*)levelStr);
+	elm_layout_text_set(s_info.settingLayout, (const char*)"txt.levelValue", (const char*)levelStr);
 	eina_stringshare_del(levelStr);
 
 	Eina_Stringshare* lessonStr = eina_stringshare_printf("%d", s_info.lesson);
-	Eina_Bool ret2 = elm_layout_text_set(s_info.settingLayout, (const char*)"txt.lessonValue", (const char*)lessonStr);
+	elm_layout_text_set(s_info.settingLayout, (const char*)"txt.lessonValue", (const char*)lessonStr);
 	eina_stringshare_del(lessonStr);
 }
 
@@ -226,14 +226,14 @@ void view_destroy(void)
 void view_set_clock(int hour, int minute, int second)
 {
 	Eina_Stringshare *str = eina_stringshare_printf("%.2d:%.2d:%.2d", hour, minute, second);
-	Eina_Bool ret = elm_layout_text_set(s_info.layout, (const char*)PART_CLOCK_TEXT, (const char*)str);
+	elm_layout_text_set(s_info.layout, (const char*)PART_CLOCK_TEXT, (const char*)str);
 	//dlog_print(DLOG_DEBUG, LOG_TAG, "ret: %d. %s", ret, str);
 	eina_stringshare_del(str);
 }
 
 void view_set_word(int index, int mode, const char* spelling, const char* phonetic, const char* meaning) {
 	Eina_Stringshare* indexStr = eina_stringshare_printf("%d", index);
-	Eina_Bool ret1 = elm_layout_text_set(s_info.layout, (const char*)PART_WORD_INDEX_TEXT, (const char*)indexStr);
+	elm_layout_text_set(s_info.layout, (const char*)PART_WORD_INDEX_TEXT, (const char*)indexStr);
 	eina_stringshare_del(indexStr);
 
 	if (!mode) {
@@ -249,7 +249,7 @@ void view_set_word(int index, int mode, const char* spelling, const char* phonet
 
 char* get_day_name(int day)
 {
-	char* day_name[7] = { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
+	const char* day_name[7] = { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
 	return strdup(day_name[day]);
 }
 
