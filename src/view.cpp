@@ -5,6 +5,11 @@
 
 #define MAIN_EDJ "edje/main.edj"
 
+extern int g_mode;
+extern int g_level;
+extern int g_lessonFrom;
+extern int g_random;
+
 struct view_info {
 	Evas_Object *win;
 	Evas_Object *layout;
@@ -49,6 +54,19 @@ static void _temp_cb(void *data, Evas_Object *obj, const char *emission, const c
 	} else {
 		elm_object_signal_emit(s_info.layout, "show", "txt.wordIndex");
 		s_info.settingLayoutEnabled = 1;
+
+		s_info.mode = g_mode;
+		s_info.level = g_level;
+		s_info.lesson = g_lessonFrom;
+		s_info.randomEnabled = g_random;
+
+		Eina_Stringshare* levelStr = eina_stringshare_printf("%d", s_info.level);
+		Eina_Bool ret1 = elm_layout_text_set(s_info.settingLayout, (const char*)"txt.levelValue", (const char*)levelStr);
+		eina_stringshare_del(levelStr);
+
+		Eina_Stringshare* lessonStr = eina_stringshare_printf("%d", s_info.lesson);
+		Eina_Bool ret2 = elm_layout_text_set(s_info.settingLayout, (const char*)"txt.lessonValue", (const char*)lessonStr);
+		eina_stringshare_del(lessonStr);
 	}
 }
 
@@ -73,9 +91,11 @@ static void _level_cb(void *data, Evas_Object *obj, const char *emission, const 
 	}
 	Eina_Stringshare* levelStr = eina_stringshare_printf("%d", s_info.level);
 	Eina_Bool ret1 = elm_layout_text_set(s_info.settingLayout, (const char*)"txt.levelValue", (const char*)levelStr);
+	eina_stringshare_del(levelStr);
 
 	Eina_Stringshare* lessonStr = eina_stringshare_printf("%d", s_info.lesson);
 	Eina_Bool ret2 = elm_layout_text_set(s_info.settingLayout, (const char*)"txt.lessonValue", (const char*)lessonStr);
+	eina_stringshare_del(lessonStr);
 }
 
 static void _submit_cb(void *data, Evas_Object *obj, const char *emission, const char* source)

@@ -4,6 +4,7 @@
 #include "view.h"
 #include "view_defines.h"
 #include "DbHelper.h"
+#include "PreferenceHelper.h"
 
 int g_wordStatus = 0;
 int g_wordIndex = 0;
@@ -11,6 +12,7 @@ int g_mode = 0;
 int g_level = 25;
 int g_lessonFrom = 1;
 int g_lessonTo = 3;
+int g_random = 0;
 
 struct main_info {
 	int hour;
@@ -28,12 +30,22 @@ static void _set_calendar(int day, int date);
 static void settingChangedCb(int mode, int randomEnabled, int level, int lessonFrom, int lessonTo) {
 	dlog_print(DLOG_INFO, LOG_TAG, "setting changed. mode: %d, random: %d, level: %d, lesson: %d ~ %d", mode, randomEnabled, level, lessonFrom, lessonTo);
 	g_mode = mode;
+	g_random = randomEnabled;
+	g_level = level;
+	g_lessonFrom = lessonFrom;
+	g_lessonTo = lessonTo;
+
+	PreferenceHelper::setInt(&PREF_KEY_MODE, g_mode);
+	PreferenceHelper::setInt(&PREF_KEY_LEVEL, g_level);
+	PreferenceHelper::setInt(&PREF_KEY_LESSON, g_lessonFrom);
+	PreferenceHelper::setInt(&PREF_KEY_RANDOM, g_random);
+
 	DbHelper* dbHelper = new DbHelper();
 	if (g_mode == 0) {
-		dbHelper->getWordListByLevel(level, randomEnabled);
+		dbHelper->getWordListByLevel(g_level, g_random);
 	}
 	else {
-		dbHelper->getWordListByLesson(lessonFrom, lessonTo, randomEnabled);
+		dbHelper->getWordListByLesson(g_lessonFrom, g_lessonTo, g_random);
 	}
 	g_wordStatus = 0;
 	g_wordIndex = 0;
@@ -144,9 +156,28 @@ static bool app_create(int width, int height, void* user_data)
 	if (watch_app_add_event_handler(&handlers[APP_EVENT_DEVICE_ORIENTATION_CHANGED], APP_EVENT_DEVICE_ORIENTATION_CHANGED, device_orientation, NULL) != APP_ERROR_NONE)
 		dlog_print(DLOG_ERROR, LOG_TAG, "watch_app_add_event_handler () is failed");
 
+	g_mode = PreferenceHelper::getInt(&PREF_KEY_MODE);
+	g_level = PreferenceHelper::getInt(&PREF_KEY_LEVEL);
+	g_lessonFrom = PreferenceHelper::getInt(&PREF_KEY_LESSON);
+	g_lessonTo = g_lessonFrom + 2;
+	g_random = PreferenceHelper::getInt(&PREF_KEY_RANDOM);
+	if (g_level == 0 && g_lessonFrom == 0) {
+		// no setting
+		g_level = 25;
+		g_lessonFrom = 1;
+		g_lessonTo = g_lessonFrom + 2;
+	}
+	dlog_print(DLOG_INFO, LOG_TAG, "g_mode: %d", g_mode);
+	dlog_print(DLOG_INFO, LOG_TAG, "g_level: %d", g_level);
+	dlog_print(DLOG_INFO, LOG_TAG, "g_lessonFrom: %d", g_lessonFrom);
+	dlog_print(DLOG_INFO, LOG_TAG, "g_random: %d", g_random);
+
 	DbHelper* dbHelper = new DbHelper();
-	//dbHelper->getWordListByLesson(1,2);
-	dbHelper->getWordListByLevel(26, TRUE);
+	if (!g_mode) {
+		dbHelper->getWordListByLevel(g_level, g_random);
+	} else {
+		dbHelper->getWordListByLesson(g_lessonFrom, g_lessonTo, g_random);
+	}
 
 	view_create_with_size(width, height, settingChangedCb);
 
