@@ -48,6 +48,8 @@ static void settingChangedCb(int mode, int randomEnabled, int level, int lessonF
 	}
 	g_wordStatus = 0;
 	g_wordIndex = 0;
+
+	view_set_chapter();
 }
 
 /*
@@ -311,6 +313,8 @@ static void _curent_time_get(void)
 	_time_get(watch_time);
 	view_set_clock(s_time_info.hour, s_time_info.minute);
 	watch_time_delete(watch_time);
+
+	view_set_chapter();
 }
 
 static void _set_calendar(int day, int date)

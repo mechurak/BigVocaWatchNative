@@ -8,6 +8,7 @@
 extern int g_mode;
 extern int g_level;
 extern int g_lessonFrom;
+extern int g_lessonTo;
 extern int g_random;
 
 struct view_info {
@@ -53,10 +54,10 @@ static void _temp_cb(void *data, Evas_Object *obj, const char *emission, const c
 {
 	dlog_print(DLOG_DEBUG, LOG_TAG, "temp_cb: %s. %s", emission, source);
 	if (s_info.settingLayoutEnabled) {
-		elm_object_signal_emit(s_info.layout, "hide", "txt.wordIndex");
+		elm_object_signal_emit(s_info.layout, "hide", "txt.chapter");
 		s_info.settingLayoutEnabled = 0;
 	} else {
-		elm_object_signal_emit(s_info.layout, "show", "txt.wordIndex");
+		elm_object_signal_emit(s_info.layout, "show", "txt.chapter");
 		s_info.settingLayoutEnabled = 1;
 
 		s_info.mode = g_mode;
@@ -107,7 +108,7 @@ static void _submit_cb(void *data, Evas_Object *obj, const char *emission, const
 	dlog_print(DLOG_DEBUG, LOG_TAG, "_submit_cb: %s. %s", emission, source);
 	s_info.settingCb(s_info.mode, s_info.randomEnabled, s_info.level, s_info.lesson, s_info.lesson + 2);
 
-	elm_object_signal_emit(s_info.layout, "hide", "txt.wordIndex");
+	elm_object_signal_emit(s_info.layout, "hide", "txt.chapter");
 	s_info.settingLayoutEnabled = 0;
 }
 
@@ -145,7 +146,7 @@ void view_create(void)
 		return;
 	}
 
-	view_set_customized_event_callback(s_info.layout, (char*)"mouse,clicked", (char*)"txt.wordIndex", _temp_cb, NULL);
+	view_set_customized_event_callback(s_info.layout, (char*)"mouse,clicked", (char*)"txt.chapter", _temp_cb, NULL);
 	view_set_customized_event_callback(s_info.settingLayout, (char*)"mouse,clicked", (char*)"level,down", _level_cb, NULL);
 	view_set_customized_event_callback(s_info.settingLayout, (char*)"mouse,clicked", (char*)"level,up", _level_cb, NULL);
 	view_set_customized_event_callback(s_info.settingLayout, (char*)"mouse,clicked", (char*)"lesson,down", _level_cb, NULL);
@@ -279,6 +280,17 @@ void view_set_date(int day, int date) {
 	Eina_Stringshare* dateStr = eina_stringshare_printf("%s %d", day_name, date);
 	elm_layout_text_set(s_info.layout, (const char*)"txt.date", (const char*)dateStr);
 	eina_stringshare_del(dateStr);
+}
+
+void view_set_chapter() {
+	Eina_Stringshare* chapterStr = NULL;
+	if (!g_mode) {
+		chapterStr = eina_stringshare_printf("Lv. %d", g_level);
+	} else {
+		chapterStr = eina_stringshare_printf("D.%d~%d", g_lessonFrom, g_lessonTo);
+	}
+	elm_layout_text_set(s_info.layout, (const char*)"txt.chapter", (const char*)chapterStr);
+	eina_stringshare_del(chapterStr);
 }
 
 /*

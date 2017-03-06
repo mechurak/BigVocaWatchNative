@@ -92,6 +92,23 @@ collections {
             }
          }
          part {
+            name: "txt.chapter";
+            type: TEXT;
+            description {
+               state: "default" 0.0;
+               color: 200 230 200 255;
+               align: 0.5 0.5;
+               rel1 { relative: 0.52 0.18;}
+               rel2 { relative: 0.86 0.34;}
+               text {
+                  font: "Tizen:style=Regular";
+                  size: 30;
+                  text: "Lv.24";
+                  align: 0.5 0.5;
+               }
+            }
+         }
+         part {
             name: "rect.toplineRight";
             type: RECT;
             description {
@@ -205,21 +222,18 @@ collections {
       programs {
          program {
             signal: "mouse,clicked,1";
-            source: "txt.wordIndex";
-            action: SIGNAL_EMIT "mouse,clicked" "txt.wordIndex";
-            //action: PARAM_SET "swallow.wordPopup" "visible" 1;
-            //action: STATE_SET "show" 0.0;
-            //target: "swallow.wordPopup";
+            source: "txt.chapter";
+            action: SIGNAL_EMIT "mouse,clicked" "txt.chapter";
          }
          program {            
             signal: "hide";
-            source: "txt.wordIndex";            
+            source: "txt.chapter";            
             action: STATE_SET "default" 0.0;
             target: "swallow.wordPopup";
          }
          program {            
             signal: "show";
-            source: "txt.wordIndex";
+            source: "txt.chapter";
             action: STATE_SET "show" 0.0;
             target: "swallow.wordPopup";
          }

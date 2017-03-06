@@ -13,6 +13,7 @@ void view_set_clock(int hour, int minute);
 void view_set_word(int index, int mode, const char* spelling, const char* phonetic, const char* meaning);
 char* get_day_name(int day);
 void view_set_date(int day, int date);
+void view_set_chapter();
 void view_reset_display_state(void);
 
 void view_send_signal_to_edje(Evas_Object *layout, const char *signal, const char *source);
