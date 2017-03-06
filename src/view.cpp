@@ -22,6 +22,9 @@ struct view_info {
 	int lesson;
 	int randomEnabled;
 	void(*settingCb)(int,int,int,int,int);
+	int hour;
+	int minute;
+	int isPm;
 };
 
 static view_info s_info = {
@@ -31,6 +34,7 @@ static view_info s_info = {
 	0, 0, 0, 0,
 	0, 0, 1,
 	NULL,
+	10, 8, 0
 };
 
 static void _message_outside_object_cb(void *data, Evas_Object *obj, Edje_Message_Type type, int id, void *msg);
@@ -223,12 +227,28 @@ void view_destroy(void)
  * @brief Stores the hour value
  * @param hour - New hour value
  */
-void view_set_clock(int hour, int minute, int second)
+void view_set_clock(int hour, int minute)
 {
-	Eina_Stringshare *str = eina_stringshare_printf("%.2d:%.2d:%.2d", hour, minute, second);
-	elm_layout_text_set(s_info.layout, (const char*)PART_CLOCK_TEXT, (const char*)str);
-	//dlog_print(DLOG_DEBUG, LOG_TAG, "ret: %d. %s", ret, str);
-	eina_stringshare_del(str);
+	int isPm = 0;
+	if (hour > 12) {
+		hour -= 12;
+		isPm = 1;
+	}
+	if (hour == 0) hour = 12;
+
+	if (isPm != s_info.isPm) {
+		const char* pmStr = isPm ? (const char*)"PM" : (const char*)"AM";
+		elm_layout_text_set(s_info.layout, (const char*)"txt.pm", (const char*)pmStr);
+		s_info.isPm = isPm;
+	}
+
+	if (minute != s_info.minute || hour != s_info.hour) {
+		Eina_Stringshare *str = eina_stringshare_printf("%.2d  %.2d", hour, minute);
+		elm_layout_text_set(s_info.layout, (const char*)PART_CLOCK_TEXT, (const char*)str);
+		eina_stringshare_del(str);
+		s_info.hour = hour;
+		s_info.minute = minute;
+	}
 }
 
 void view_set_word(int index, int mode, const char* spelling, const char* phonetic, const char* meaning) {

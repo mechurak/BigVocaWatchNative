@@ -17,7 +17,6 @@ int g_random = 0;
 struct main_info {
 	int hour;
 	int minute;
-	int second;
 	int cur_day;
 	int cur_date;
 };
@@ -245,7 +244,7 @@ static void app_time_tick(watch_time_h watch_time, void* user_data)
 	_set_calendar(day, date);
 
 	_time_get(watch_time);
-	view_set_clock(s_time_info.hour, s_time_info.minute, s_time_info.second);
+	view_set_clock(s_time_info.hour, s_time_info.minute);
 
 	int index = DbHelper::wordList[g_wordIndex].id;
 	int mode;
@@ -297,7 +296,6 @@ int main(int argc, char *argv[])
  */
 static void _time_get(watch_time_h watch_time)
 {
-	watch_time_get_second(watch_time, &s_time_info.second);
 	watch_time_get_minute(watch_time, &s_time_info. minute);
 	watch_time_get_hour24(watch_time, &s_time_info.hour);
 }
@@ -311,7 +309,7 @@ static void _curent_time_get(void)
 
 	watch_time_get_current_time(&watch_time);
 	_time_get(watch_time);
-	view_set_clock(s_time_info.hour, s_time_info.minute, s_time_info.second);
+	view_set_clock(s_time_info.hour, s_time_info.minute);
 	watch_time_delete(watch_time);
 }
 

@@ -23,8 +23,42 @@ collections {
                rel2 { relative: 1.0 0.6;}
                text {
                   font: "Tizen:style=Regular";
+                  size:65;
+                  text: "10 08";
+                  align: 0.5 0.5;
+               }
+            }
+         }
+         part {
+            name: "txt.colon";
+            type: TEXT;
+            description {
+               state: "default" 0.0;
+               color: 200 230 200 255;
+               align: 0.5 0.5;
+               rel1 { relative: 0.0 0.39;}
+               rel2 { relative: 1.0 0.6;}
+               text {
+                  font: "Tizen:style=Regular";
                   size: 56;
-                  text: "11:11:11";
+                  text: ":";
+                  align: 0.5 0.5;
+               }
+            }
+         }
+         part {
+            name: "txt.pm";
+            type: TEXT;
+            description {
+               state: "default" 0.0;
+               color: 200 230 200 255;
+               align: 0.5 0.5;
+               rel1 { relative: 0.67 0.47;}
+               rel2 { relative: 1.0 0.6;}
+               text {
+                  font: "Tizen:style=Regular";
+                  size: 30;
+                  text: "AM";
                   align: 0.5 0.5;
                }
             }
