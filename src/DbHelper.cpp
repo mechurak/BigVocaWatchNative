@@ -44,7 +44,7 @@ int DbHelper::callback(void *NotUsed, int argc, char **argv, char **azColName) {
 void DbHelper::getWordListByLevel(int level, int randomEnabled) {
 	int fromId = (level - 1) * 100 + 1;
 	int toId = level * 100;
-	dlog_print(DLOG_ERROR, LOG_TAG, "getWordListByLevel. from: %d, to: %d", fromId, toId);
+	dlog_print(DLOG_INFO, LOG_TAG, "getWordListByLevel. from: %d, to: %d", fromId, toId);
 
 	char sql[200];
 	const char* orderByValue = randomEnabled ? "random()" : "id";
@@ -55,7 +55,7 @@ void DbHelper::getWordListByLevel(int level, int randomEnabled) {
     mSelectRowCount = 0;
 
     sqlite3_exec(mDbHandle, sql, callback, &counter, &ErrMsg);
-    dlog_print(DLOG_ERROR, LOG_TAG, "after sqlite3_exec. %d. %s", counter, ErrMsg);
+    dlog_print(DLOG_INFO, LOG_TAG, "after sqlite3_exec. %d. %s", counter, ErrMsg);
     wordCount = mSelectRowCount;
 
     return;

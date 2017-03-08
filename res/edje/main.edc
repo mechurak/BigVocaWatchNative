@@ -223,17 +223,17 @@ collections {
          program {
             signal: "mouse,clicked,1";
             source: "txt.chapter";
-            action: SIGNAL_EMIT "mouse,clicked" "txt.chapter";
+            action: SIGNAL_EMIT "mouse,clicked" "setting";
          }
          program {            
             signal: "hide";
-            source: "txt.chapter";            
+            source: "setting";
             action: STATE_SET "default" 0.0;
             target: "swallow.wordPopup";
          }
          program {            
             signal: "show";
-            source: "txt.chapter";
+            source: "setting";
             action: STATE_SET "show" 0.0;
             target: "swallow.wordPopup";
          }
@@ -250,29 +250,36 @@ collections {
                rel2.relative: 1.0 1.0;               
             }
          }
-         part { name: "txt.random";
-            type: TEXT;
+         part { name: "rect.random";
+            type: RECT;
             mouse_events: 1;
             description { state: "default" 0.0;
                align: 0.5 0.5;
-               rel1.relative: 0.3 0.1;
-               rel2.relative: 0.7 0.2;
+               color: 0 100 0 255;
+               rel1.relative: 0.02 0.02;
+               rel2.relative: 0.22 0.22;
+            }
+         }
+         part { name: "txt.random";
+            type: TEXT;
+            description { state: "default" 0.0;
+               align: 0.5 0.5;
+               rel1.relative: 0.23 0.02;
+               rel2.relative: 0.52 0.22;
                text {
                   font: "Tizen:style=Regular";
                   size: 15;
                   text: "random";
-                  align: 0.5 0.5;
+                  align: 0.0 0.5;
                }
             }
          }
          part { name: "txt.level";
             type: TEXT;
-            mouse_events: 1;
             description { state: "default" 0.0;
                align: 0.5 0.5;
-               color: 200 200 200 255;
-               rel1.relative: 0.05 0.3;
-               rel2.relative: 0.3 0.4;
+               rel1.relative: 0.05 0.24;
+               rel2.relative: 0.3 0.44;
                text {
                   font: "Tizen:style=Regular";
                   size: 15;
@@ -283,11 +290,10 @@ collections {
          }
          part { name: "txt.levelValue";
             type: TEXT;
-            mouse_events: 1;            
             description { state: "default" 0.0;
                align: 0.5 0.5;               
-               rel1.relative: 0.55 0.3;
-               rel2.relative: 0.75 0.4;
+               rel1.relative: 0.55 0.24;
+               rel2.relative: 0.75 0.44;
                text {
                   font: "Tizen:style=Regular";
                   size: 15;
@@ -296,33 +302,32 @@ collections {
                }
             }
          }
-         part { name: "txt.levelDown";
+         part { name: "rect.levelDown";
             type: RECT;
             mouse_events: 1;
             description { state: "default" 0.0;
                align: 0.5 0.5;
                color: 0 100 0 255;
-               rel1.relative: 0.32 0.25;
-               rel2.relative: 0.53 0.45;
+               rel1.relative: 0.32 0.24;
+               rel2.relative: 0.52 0.44;
             }
          }
-         part { name: "txt.levelUp";
+         part { name: "rect.levelUp";
             type: RECT;
             mouse_events: 1;
             description { state: "default" 0.0;
                align: 0.5 0.5;
                color: 0 100 0 255;
-               rel1.relative: 0.77 0.24;
-               rel2.relative: 0.98 0.45;
+               rel1.relative: 0.78 0.24;
+               rel2.relative: 0.98 0.44;
             }
          }
          part { name: "txt.lesson";
             type: TEXT;
-            mouse_events: 1;
             description { state: "default" 0.0;
                align: 0.5 0.5;
-               rel1.relative: 0.05 0.6;
-               rel2.relative: 0.3 0.7;
+               rel1.relative: 0.05 0.50;
+               rel2.relative: 0.3 0.70;
                text {
                   font: "Tizen:style=Regular";
                   size: 15;
@@ -333,11 +338,10 @@ collections {
          }
          part { name: "txt.lessonValue";
             type: TEXT;
-            mouse_events: 1;
             description { state: "default" 0.0;
                align: 0.5 0.5;
-               rel1.relative: 0.55 0.6;
-               rel2.relative: 0.75 0.7;
+               rel1.relative: 0.55 0.50;
+               rel2.relative: 0.75 0.70;
                text {
                   font: "Tizen:style=Regular";
                   size: 15;
@@ -346,67 +350,110 @@ collections {
                }
             }
          }
-         part { name: "txt.lessonDown";
+         part { name: "rect.lessonDown";
             type: RECT;
             mouse_events: 1;
             description { state: "default" 0.0;
                align: 0.5 0.5;
                color: 0 100 0 255;
-               rel1.relative: 0.32 0.55;
-               rel2.relative: 0.53 0.75;
+               rel1.relative: 0.32 0.50;
+               rel2.relative: 0.52 0.70;
             }
          }
-         part { name: "txt.lessonUp";
+         part { name: "rect.lessonUp";
             type: RECT;
             mouse_events: 1;
             description { state: "default" 0.0;
                align: 0.5 0.5;
                color: 0 100 0 255;
-               rel1.relative: 0.77 0.55;
-               rel2.relative: 0.98 0.75;
+               rel1.relative: 0.78 0.50;
+               rel2.relative: 0.98 0.70;
             }
          }
          part { name: "txt.submit";
             type: TEXT;
-            mouse_events: 1;
             description { state: "default" 0.0;
                align: 0.5 0.5;
-               rel1.relative: 0.3 0.82;
-               rel2.relative: 0.7 0.98;
+               rel1.relative: 0.55 0.78;
+               rel2.relative: 0.77 0.98;
                text {
                   font: "Tizen:style=Regular";
                   size: 15;
                   text: "submit";
-                  align: 0.5 0.5;
+                  align: 1.0 0.5;
                }
+            }
+         }
+         part { name: "rect.submit";
+            type: RECT;
+            mouse_events: 1;
+            description { state: "default" 0.0;
+               align: 0.5 0.5;
+               color: 0 100 0 255;
+               rel1.relative: 0.78 0.78;
+               rel2.relative: 0.98 0.98;
+            }
+         }
+         part { name: "txt.cancel";
+            type: TEXT;
+            description { state: "default" 0.0;
+               align: 0.5 0.5;
+               rel1.relative: 0.23 0.78;
+               rel2.relative: 0.45 0.98;
+               text {
+                  font: "Tizen:style=Regular";
+                  size: 15;
+                  text: "cancel";
+                  align: 0.0 0.5;
+               }
+            }
+         }
+         part { name: "rect.cancel";
+            type: RECT;
+            mouse_events: 1;
+            description { state: "default" 0.0;
+               align: 0.5 0.5;
+               color: 0 100 0 255;
+               rel1.relative: 0.02 0.78;
+               rel2.relative: 0.22 0.98;
             }
          }
       } // parts end
       programs {
          program {
             signal: "mouse,clicked,1";
-            source: "txt.levelDown";
+            source: "rect.levelDown";
             action: SIGNAL_EMIT "mouse,clicked" "level,down";
          }
          program {
             signal: "mouse,clicked,1";
-            source: "txt.levelUp";
+            source: "rect.levelUp";
             action: SIGNAL_EMIT "mouse,clicked" "level,up";
          }
          program {
             signal: "mouse,clicked,1";
-            source: "txt.lessonDown";
+            source: "rect.lessonDown";
             action: SIGNAL_EMIT "mouse,clicked" "lesson,down";
          }
          program {
             signal: "mouse,clicked,1";
-            source: "txt.lessonUp";
+            source: "rect.lessonUp";
             action: SIGNAL_EMIT "mouse,clicked" "lesson,up";
          }
          program {
             signal: "mouse,clicked,1";
-            source: "txt.submit";
+            source: "rect.random";
+            action: SIGNAL_EMIT "mouse,clicked" "random";
+         }
+         program {
+            signal: "mouse,clicked,1";
+            source: "rect.submit";
             action: SIGNAL_EMIT "mouse,clicked" "submit";
+         }
+         program {
+            signal: "mouse,clicked,1";
+            source: "rect.cancel";
+            action: SIGNAL_EMIT "mouse,clicked" "cancel";
          }
       } // programs end
    }  // group end

@@ -54,10 +54,10 @@ static void _temp_cb(void *data, Evas_Object *obj, const char *emission, const c
 {
 	dlog_print(DLOG_DEBUG, LOG_TAG, "temp_cb: %s. %s", emission, source);
 	if (s_info.settingLayoutEnabled) {
-		elm_object_signal_emit(s_info.layout, "hide", "txt.chapter");
+		elm_object_signal_emit(s_info.layout, "hide", "setting");
 		s_info.settingLayoutEnabled = 0;
 	} else {
-		elm_object_signal_emit(s_info.layout, "show", "txt.chapter");
+		elm_object_signal_emit(s_info.layout, "show", "setting");
 		s_info.settingLayoutEnabled = 1;
 
 		s_info.mode = g_mode;
@@ -72,26 +72,40 @@ static void _temp_cb(void *data, Evas_Object *obj, const char *emission, const c
 		Eina_Stringshare* lessonStr = eina_stringshare_printf("%d", s_info.lesson);
 		elm_layout_text_set(s_info.settingLayout, (const char*)"txt.lessonValue", (const char*)lessonStr);
 		eina_stringshare_del(lessonStr);
+
+		const char* levelTitleStr = (s_info.mode == 0) ? (const char*)"level (*)" : (const char*)"level";
+		elm_layout_text_set(s_info.settingLayout, (const char*)"txt.level", (const char*)levelTitleStr);
+
+		const char* lessonTitleStr = (s_info.mode == 1) ? (const char*)"lesson (*)" : (const char*)"lesson";
+		elm_layout_text_set(s_info.settingLayout, (const char*)"txt.lesson", (const char*)lessonTitleStr);
+
+		const char* randomStr = s_info.randomEnabled ? (const char*)"random on" : (const char*)"random off";
+		elm_layout_text_set(s_info.settingLayout, (const char*)"txt.random", (const char*)randomStr);
 	}
 }
 
 static void _level_cb(void *data, Evas_Object *obj, const char *emission, const char* source)
 {
 	dlog_print(DLOG_DEBUG, LOG_TAG, "_level_cb: %s. %s", emission, source);
+	int prevMode = s_info.mode;
 	if (strcmp(source, (char*)"level,down") == 0) {
 		s_info.level--;
+		if (s_info.level < 1) s_info.level = 1;
 		s_info.mode = 0;
 	}
 	else if (strcmp(source, (char*)"level,up") == 0) {
 		s_info.level++;
+		if (s_info.level > 80) s_info.level = 80; // max level(80) : no relation with lesson
 		s_info.mode = 0;
 	}
 	else if (strcmp(source, (char*)"lesson,down") == 0) {
 		s_info.lesson--;
+		if (s_info.lesson < 1) s_info.lesson = 1;
 		s_info.mode = 1;
 	}
 	else if (strcmp(source, (char*)"lesson,up") == 0) {
 		s_info.lesson++;
+		if (s_info.lesson > 78) s_info.lesson = 78; // max lesson(80) - 2 (currently, 3 lessons are one set)
 		s_info.mode = 1;
 	}
 	Eina_Stringshare* levelStr = eina_stringshare_printf("%d", s_info.level);
@@ -101,14 +115,32 @@ static void _level_cb(void *data, Evas_Object *obj, const char *emission, const 
 	Eina_Stringshare* lessonStr = eina_stringshare_printf("%d", s_info.lesson);
 	elm_layout_text_set(s_info.settingLayout, (const char*)"txt.lessonValue", (const char*)lessonStr);
 	eina_stringshare_del(lessonStr);
+
+	if (prevMode != s_info.mode) {
+		const char* levelTitleStr = (s_info.mode == 0) ? (const char*)"level (*)" : (const char*)"level";
+		elm_layout_text_set(s_info.settingLayout, (const char*)"txt.level", (const char*)levelTitleStr);
+
+		const char* lessonTitleStr = (s_info.mode == 1) ? (const char*)"lesson (*)" : (const char*)"lesson";
+		elm_layout_text_set(s_info.settingLayout, (const char*)"txt.lesson", (const char*)lessonTitleStr);
+	}
+}
+
+static void _random_cb(void *data, Evas_Object *obj, const char *emission, const char* source)
+{
+	dlog_print(DLOG_DEBUG, LOG_TAG, "_random_cb: %s. %s", emission, source);
+	s_info.randomEnabled = s_info.randomEnabled ? 0 : 1;
+
+	const char* randomStr = s_info.randomEnabled ? (const char*)"random on" : (const char*)"random off";
+	elm_layout_text_set(s_info.settingLayout, (const char*)"txt.random", (const char*)randomStr);
 }
 
 static void _submit_cb(void *data, Evas_Object *obj, const char *emission, const char* source)
 {
 	dlog_print(DLOG_DEBUG, LOG_TAG, "_submit_cb: %s. %s", emission, source);
-	s_info.settingCb(s_info.mode, s_info.randomEnabled, s_info.level, s_info.lesson, s_info.lesson + 2);
-
-	elm_object_signal_emit(s_info.layout, "hide", "txt.chapter");
+	if (strcmp(source, (char*)"submit") == 0) {
+		s_info.settingCb(s_info.mode, s_info.randomEnabled, s_info.level, s_info.lesson, s_info.lesson + 2);
+	}
+	elm_object_signal_emit(s_info.layout, "hide", "setting");
 	s_info.settingLayoutEnabled = 0;
 }
 
@@ -146,12 +178,14 @@ void view_create(void)
 		return;
 	}
 
-	view_set_customized_event_callback(s_info.layout, (char*)"mouse,clicked", (char*)"txt.chapter", _temp_cb, NULL);
+	view_set_customized_event_callback(s_info.layout, (char*)"mouse,clicked", (char*)"setting", _temp_cb, NULL);
 	view_set_customized_event_callback(s_info.settingLayout, (char*)"mouse,clicked", (char*)"level,down", _level_cb, NULL);
 	view_set_customized_event_callback(s_info.settingLayout, (char*)"mouse,clicked", (char*)"level,up", _level_cb, NULL);
 	view_set_customized_event_callback(s_info.settingLayout, (char*)"mouse,clicked", (char*)"lesson,down", _level_cb, NULL);
 	view_set_customized_event_callback(s_info.settingLayout, (char*)"mouse,clicked", (char*)"lesson,up", _level_cb, NULL);
+	view_set_customized_event_callback(s_info.settingLayout, (char*)"mouse,clicked", (char*)"random", _random_cb, NULL);
 	view_set_customized_event_callback(s_info.settingLayout, (char*)"mouse,clicked", (char*)"submit", _submit_cb, NULL);
+	view_set_customized_event_callback(s_info.settingLayout, (char*)"mouse,clicked", (char*)"cancel", _submit_cb, NULL);
 
 	/* Show window after main view is set up */
 	evas_object_show(s_info.win);
