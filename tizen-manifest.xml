@@ -5,7 +5,5 @@
         <label>bigvocawatchnative</label>
         <icon>bigvocawatchnative.png</icon>
     </watch-application>
-    <privileges>
-        <privilege>http://tizen.org/privilege/alarm.set</privilege>
-    </privileges>
+    <feature name="http://tizen.org/feature/screen.size.normal.360.360">true</feature>
 </manifest>
